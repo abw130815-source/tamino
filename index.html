@@ -4,167 +4,781 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAMINO.exe</title>
+<title>TAMINO.exe — Official Chaos Center</title>
 
 <style>
+:root {
+    --bg: #09090f;
+    --card: rgba(27, 25, 43, .82);
+    --purple: #a855f7;
+    --pink: #ec4899;
+    --blue: #6366f1;
+    --text: #f5f3ff;
+    --muted: #aaa4c5;
+}
+
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #101014;
-    color: white;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
     text-align: center;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
+/* ANIMIERTER HINTERGRUND */
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse at 15% 15%, #39145d55, transparent 45%),
+        radial-gradient(ellipse at 85% 70%, #3025a044, transparent 45%),
+        #09090f;
+}
+
+.orb {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .3;
+    animation: float 12s ease-in-out infinite alternate;
+}
+
+.orb.one {
+    background: #9333ea;
+    top: -100px;
+    left: -100px;
+}
+
+.orb.two {
+    background: #4f46e5;
+    right: -100px;
+    top: 35%;
+    animation-delay: -4s;
+}
+
+.orb.three {
+    background: #db2777;
+    bottom: -180px;
+    left: 30%;
+    animation-delay: -7s;
+}
+
+@keyframes float {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(100px, 80px) scale(1.3); }
+}
+
+#particles {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* HEADER */
+
 header {
-    padding: 70px 20px 45px;
-    background: linear-gradient(135deg, #5b21b6, #171720);
+    position: relative;
+    padding: 100px 20px 75px;
+    border-bottom: 1px solid #ffffff12;
+    background: linear-gradient(180deg, #7c3aed12, transparent);
+}
+
+.badge {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 1px solid #a855f766;
+    border-radius: 50px;
+    color: #d8b4fe;
+    background: #9333ea15;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    animation: fadeIn .8s ease both;
 }
 
 h1 {
-    font-size: clamp(3rem, 10vw, 6rem);
-    margin: 0;
+    font-size: clamp(3.5rem, 12vw, 8rem);
+    font-weight: 1000;
     letter-spacing: 5px;
+    line-height: 1.1;
+    background: linear-gradient(
+        100deg, #ffffff, #c084fc, #f0abfc, #818cf8, #ffffff
+    );
+    background-size: 300% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: gradient 6s linear infinite, fadeIn 1s ease both;
 }
 
-header p {
-    color: #d5c7ff;
-    font-size: 18px;
+@keyframes gradient {
+    to { background-position: 300% center; }
 }
 
-section {
-    max-width: 750px;
-    margin: 35px auto;
-    padding: 25px;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.subtitle {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: clamp(14px, 3vw, 19px);
+}
+
+.version {
+    margin-top: 12px;
+    color: #8b83a8;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.online {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    font-size: 13px;
+    color: #86efac;
+}
+
+.online::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 15px #4ade80;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: .3; }
+}
+
+/* LAYOUT */
+
+main {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 25px 20px 60px;
+}
+
+.section-label {
+    color: #a78bfa;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-size: clamp(25px, 5vw, 38px);
+    margin-bottom: 35px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    text-align: left;
 }
 
 .card {
-    background: #1c1c25;
-    border: 1px solid #373744;
-    padding: 25px;
-    border-radius: 18px;
-    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    background: var(--card);
+    border: 1px solid #ffffff13;
+    border-radius: 22px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 10px 40px #00000018;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    animation: fadeIn .7s ease both;
 }
 
-h2 {
-    color: #b99aff;
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 70%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c084fc, transparent);
+    transition: left .6s;
 }
 
-button {
-    background: #8b5cf6;
-    color: white;
-    border: none;
-    padding: 14px 22px;
-    margin: 8px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
+.card:hover::before {
+    left: 120%;
 }
 
-button:hover {
-    background: #a78bfa;
-    transform: scale(1.04);
+.card:hover {
+    transform: translateY(-6px);
+    border-color: #a855f755;
+    box-shadow: 0 15px 45px #9333ea16;
 }
 
-#result {
-    font-size: 21px;
-    margin-top: 20px;
-    min-height: 30px;
+.card h2 {
+    color: #d8b4fe;
+    font-size: 18px;
+    margin-bottom: 22px;
+}
+
+.card p {
+    color: #c4bfd7;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.center {
+    text-align: center;
+}
+
+.muted {
+    color: var(--muted) !important;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 18px 8px;
+    background: #ffffff05;
+    border: 1px solid #ffffff0d;
+    border-radius: 14px;
 }
 
 .stat {
-    font-size: 38px;
-    font-weight: bold;
-    color: #b99aff;
+    display: block;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 900;
+    color: #c084fc;
+    margin-bottom: 8px;
 }
 
+.stat-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* BUTTONS */
+
+button {
+    position: relative;
+    border: 1px solid #ffffff12;
+    border-radius: 12px;
+    padding: 13px 19px;
+    margin: 5px;
+    color: white;
+    background: linear-gradient(135deg, #9333ea, #6d28d9);
+    font-size: 14px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, filter .2s;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 25px #9333ea44;
+    filter: brightness(1.15);
+}
+
+button:active {
+    transform: scale(.96);
+}
+
+button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 4px;
+}
+
+.btn-pink {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+}
+
+.btn-blue {
+    background: linear-gradient(135deg, #6366f1, #4338ca);
+}
+
+.btn-dark {
+    background: #292538;
+}
+
+/* SIMULATOR */
+
+.simulator {
+    margin-top: 25px;
+    padding: 22px;
+    background: #09090f99;
+    border: 1px solid #ffffff10;
+    border-radius: 16px;
+}
+
+.result-label {
+    color: #a78bfa;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+}
+
+#result {
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(15px, 3vw, 19px);
+    font-weight: 650;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.result-pop {
+    animation: pop .35s ease;
+}
+
+@keyframes pop {
+    0% { opacity: 0; transform: scale(.9) translateY(8px); }
+    65% { transform: scale(1.03); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.counter {
+    color: #9288ad;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+/* CHAOS METER */
+
+.meter {
+    width: 100%;
+    height: 12px;
+    margin: 18px 0 10px;
+    background: #09090f;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid #ffffff12;
+}
+
+.meter-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #6366f1, #c084fc, #ec4899);
+    box-shadow: 0 0 15px #a855f777;
+    transition: width 1.2s cubic-bezier(.2,.8,.2,1);
+}
+
+.meter-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* ACHIEVEMENTS */
+
+.achievement {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid #ffffff0d;
+}
+
+.achievement:last-child {
+    border-bottom: none;
+}
+
+.achievement-icon {
+    font-size: 26px;
+}
+
+.achievement strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.achievement small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* FOOTER */
+
 footer {
-    padding: 30px;
-    color: #888;
+    padding: 35px 20px;
+    border-top: 1px solid #ffffff0d;
+    color: #77718e;
+    font-size: 12px;
+    line-height: 2;
+}
+
+footer strong {
+    color: #c084fc;
+}
+
+/* KONFETTI */
+
+.confetti {
+    position: fixed;
+    top: -15px;
+    width: 8px;
+    height: 12px;
+    pointer-events: none;
+    z-index: 99;
+    animation: fall 2.5s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(900deg);
+        opacity: 0;
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+    header {
+        padding: 75px 15px 55px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    button {
+        margin: 5px 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<div class="background">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+</div>
+
+<canvas id="particles"></canvas>
+
 <header>
-    <h1>TAMINO.</h1>
-    <p>Eine Website, die absolut niemand gebraucht hat.</p>
-    <p>Version 1.0 • Gehirnzellen werden geladen ...</p>
+    <div class="badge">✦ DAS INOFFIZIELLE TAMINO-UNIVERSUM ✦</div>
+
+    <h1>TAMINO<span style="color:#c084fc">.</span></h1>
+
+    <p class="subtitle">
+        Eine Website, die absolut niemand gebraucht hat.
+    </p>
+
+    <p class="version">
+        VERSION 2.0 · CHAOS ENGINE EDITION
+    </p>
+
+    <div class="online">System läuft. Warum auch immer.</div>
 </header>
 
-<section>
+<main>
 
-    <div class="card">
-        <h2>👤 ÜBER TAMINO</h2>
-        <p>Willkommen auf der offiziellen Tamino-Seite.</p>
-        <p>Status: <strong>online (wahrscheinlich)</strong></p>
-        <p>Gehirnzellen: <span class="stat">???</span></p>
-        <p>Gefahr für die Gesellschaft: noch unklar.</p>
+    <div class="section-label">WILLKOMMEN IM WAHNSINN</div>
+    <h2 class="section-title">Das Tamino-Kontrollzentrum</h2>
+
+    <div class="grid">
+
+        <!-- ÜBER TAMINO -->
+
+        <div class="card">
+            <h2>👤 ÜBER TAMINO</h2>
+
+            <p>Willkommen in der offiziellen Tamino-Datenbank.</p>
+            <br>
+            <p>Status: <strong style="color:#86efac">Online (wahrscheinlich)</strong></p>
+            <p>Gehirnzellen: <strong>Messgerät nicht gefunden</strong></p>
+            <p>Gefahr für die Gesellschaft: <strong>Wird untersucht</strong></p>
+            <p>Softwareversion: <strong>Tamino 0.0.404</strong></p>
+            <p>Letztes Update: <strong>Seit immer ausstehend</strong></p>
+        </div>
+
+        <!-- SYSTEMSTATUS -->
+
+        <div class="card">
+            <h2>💻 SYSTEMSTATUS</h2>
+
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <span class="stat" id="cpu">98%</span>
+                    <span class="stat-label">CHAOS-CPU</span>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat" id="ram">404</span>
+                    <span class="stat-label">BRAIN-RAM</span>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat" id="aura">∞</span>
+                    <span class="stat-label">AURA</span>
+                </div>
+            </div>
+
+            <p style="margin-top:18px">
+                Alle Systeme sind stabil instabil.
+            </p>
+        </div>
+
+        <!-- SIMULATOR -->
+
+        <div class="card full center">
+            <h2>🎮 TAMINO-SIMULATOR</h2>
+
+            <p>Wähle deine Aktion. Die Folgen sind nicht vorhersehbar.</p>
+
+            <div style="margin-top:18px">
+                <button onclick="randomEvent()">▶ Tamino starten</button>
+                <button class="btn-pink" onclick="roast()">🔥 Tamino roasten</button>
+                <button class="btn-blue" onclick="compliment()">💎 Tamino loben</button>
+                <button class="btn-dark" onclick="surprise()">🎲 ÜBERRASCHUNG</button>
+            </div>
+
+            <div class="simulator">
+                <div class="result-label">SYSTEMAUSGABE // LIVE</div>
+                <div id="result" aria-live="polite">Warte auf Eingabe ...</div>
+                <div class="counter">
+                    Aktionen ausgeführt: <span id="clicks">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAOS METER -->
+
+        <div class="card">
+            <h2>📊 CHAOS-MESSGERÄT</h2>
+
+            <p>Aktueller Zustand des Tamino-Universums:</p>
+
+            <div class="meter">
+                <div class="meter-fill" id="chaosFill"></div>
+            </div>
+
+            <div class="meter-text">
+                <span>Vernünftig</span>
+                <strong id="chaosValue">98 % Chaos</strong>
+            </div>
+
+            <button onclick="updateChaos()">🔄 Neu messen</button>
+        </div>
+
+        <!-- ZUFALLSFAKTEN -->
+
+        <div class="card">
+            <h2>🧠 NUTZLOSE FAKTEN</h2>
+
+            <p id="fact" style="font-size:16px; min-height:80px">
+                Tamino ist der Grund, warum der Ladebalken bei 99 % stehen bleibt.
+            </p>
+
+            <button class="btn-blue" onclick="newFact()">Neuen Fakt aufdecken</button>
+        </div>
+
+        <!-- ERRUNGENSCHAFTEN -->
+
+        <div class="card">
+            <h2>🏆 ERRUNGENSCHAFTEN</h2>
+
+            <div class="achievement">
+                <span class="achievement-icon">🥉</span>
+                <div>
+                    <strong>Existiert erfolgreich</strong>
+                    <small>Schwierigkeit: Tutorial</small>
+                </div>
+            </div>
+
+            <div class="achievement">
+                <span class="achievement-icon">🏅</span>
+                <div>
+                    <strong>Website freigeschaltet</strong>
+                    <small>Du bist jetzt offiziell Inhalt.</small>
+                </div>
+            </div>
+
+            <div class="achievement">
+                <span class="achievement-icon">💀</span>
+                <div>
+                    <strong>Fehler 404 gefunden</strong>
+                    <small>Die Gehirnzelle wurde nicht gefunden.</small>
+                </div>
+            </div>
+
+            <div class="achievement">
+                <span class="achievement-icon">👑</span>
+                <div>
+                    <strong>Main Character</strong>
+                    <small>Zumindest im eigenen Browser.</small>
+                </div>
+            </div>
+
+            <div class="achievement">
+                <span class="achievement-icon">🚀</span>
+                <div>
+                    <strong>Chaos-Meister</strong>
+                    <small>Physik und Logik wurden verlassen.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMINAL -->
+
+        <div class="card">
+            <h2>⌨️ TAMINO-TERMINAL</h2>
+
+            <p>Führe einen völlig unnötigen Systemcheck durch.</p>
+
+            <button onclick="runTerminal()">System prüfen</button>
+
+            <div id="terminal" style="
+                margin-top:18px;
+                padding:15px;
+                background:#08080c;
+                border-radius:10px;
+                text-align:left;
+                color:#86efac;
+                font:12px/1.9 monospace;
+                min-height:100px;
+                overflow-wrap:anywhere;
+            ">tamino@chaos:~$ Warte auf Befehl...</div>
+        </div>
+
+        <!-- LOBOMETER -->
+
+        <div class="card full center">
+            <h2>✨ AURA-BOOSTER</h2>
+
+            <p>Drücke den Knopf, um Tamino eine völlig übertriebene Menge Aura zu geben.</p>
+
+            <div class="stat" id="auraBoost" style="margin-top:20px">0 Aura</div>
+
+            <button onclick="boostAura()">⚡ AURA AUFLADEN</button>
+            <button class="btn-pink" onclick="resetAura()">Aura zurücksetzen</button>
+        </div>
+
     </div>
-
-    <div class="card">
-        <h2>🎮 TAMINO-SIMULATOR</h2>
-        <p>Drücke einen Knopf. Finde heraus, was passiert.</p>
-
-        <button onclick="randomEvent()">
-            Tamino starten
-        </button>
-
-        <button onclick="roast()">
-            Tamino roasten
-        </button>
-
-        <button onclick="compliment()">
-            Tamino loben
-        </button>
-
-        <div id="result">Warte auf Eingabe ...</div>
-    </div>
-
-    <div class="card">
-        <h2>📊 OFFIZIELLE STATISTIKEN</h2>
-        <p>Zu 100 % wissenschaftlich nicht überprüft.</p>
-
-        <p>Chaos-Level</p>
-        <div class="stat">98 %</div>
-
-        <p>Planungskompetenz</p>
-        <div class="stat">404</div>
-
-        <p>Main-Character-Energie</p>
-        <div class="stat">∞</div>
-    </div>
-
-    <div class="card">
-        <h2>🏆 TAMINOS ERRUNGENSCHAFTEN</h2>
-        <p>🏅 Existiert erfolgreich</p>
-        <p>🏅 Hat diese Website verdient</p>
-        <p>🏅 Macht wahrscheinlich irgendwas</p>
-        <p>🏅 Legende in seiner eigenen Welt</p>
-    </div>
-
-</section>
+</main>
 
 <footer>
-    TAMINO CORP. © 2026<br>
-    Alle Angaben sind mehr oder weniger erfunden.
+    <strong>TAMINO CORP.</strong> © 2026<br>
+    Made with 0 Gehirnzellen, 100 % CSS und fragwürdigen Entscheidungen.<br>
+    Alle Angaben sind Satire. Die Statistiken sind frei erfunden.
 </footer>
 
 <script>
+"use strict";
+
+/* SPRÜCHE */
+
 const events = [
-    "TAMINO.exe wurde erfolgreich gestartet.",
-    "Tamino denkt nach ... Fehler 404.",
+    "TAMINO.exe wurde erfolgreich gestartet. Leider.",
+    "Tamino denkt nach ... Fehler 404: Gehirn nicht gefunden.",
     "Lade Persönlichkeit ... 3 % ... 3 % ... 3 %.",
     "Tamino hat den Raum betreten. Die Lage ist kritisch.",
     "Neue Mission: Einfach mal chillen.",
     "Systemmeldung: Tamino macht Tamino-Sachen.",
     "Ein seltenes Tamino-Wildtier wurde gesichtet.",
-    "Bitte warten. Tamino verarbeitet die Information."
+    "Bitte warten. Tamino verarbeitet die Information.",
+    "Windows hat ein Problem festgestellt: Tamino.",
+    "Tamino.exe reagiert nicht. Warten oder schließen?",
+    "Die NASA hat angerufen. Sie wollen ihre Rakete zurück.",
+    "Tamino hat einen Gedanken. Das System ist überlastet.",
+    "Warnung: Zu viel Tamino in der Atmosphäre.",
+    "Tamino lädt Updates herunter. Verbleibende Zeit: 84 Jahre.",
+    "Mission fehlgeschlagen. Tamino war beteiligt.",
+    "Tamino hat das Tutorial übersprungen und versteht nichts.",
+    "Neuer Rekord: 0 Aufgaben in 12 Stunden erledigt.",
+    "Tamino wurde gefunden. Er wollte eigentlich nicht gefunden werden.",
+    "Die Lage ist ernst. Tamino hat einen Plan.",
+    "Tamino.exe wurde in die Quarantäne verschoben.",
+    "System startet neu, um Tamino zu vergessen.",
+    "Tamino betritt den Chat. Alle verlassen den Chat.",
+    "Ein neuer Tag, ein neuer unnötiger Tamino-Moment.",
+    "Tamino hat gerade erfolgreich nichts gemacht.",
+    "Die Realität hat einen Bluescreen bekommen.",
+    "Tamino aktiviert den Energiesparmodus seiner Gehirnzellen.",
+    "Warnung: Logik wurde in der Nähe nicht gefunden.",
+    "Tamino versucht, eine gerade Linie zu denken.",
+    "Bitte legen Sie eine gültige Persönlichkeit ein.",
+    "Tamino hat Level 0 erreicht. Glückwunsch?",
+    "Die Physik hat soeben gekündigt.",
+    "Tamino lädt ... Bitte nicht ausschalten.",
+    "Das Universum macht eine kurze Pause wegen Tamino.",
+    "Tamino hat einen Plan B. Plan A war schon keiner.",
+    "Unbekanntes Objekt entdeckt: Tamino mit einer Idee.",
+    "Tamino wurde erfolgreich nicht verstanden.",
+    "Der Computer ist unschuldig. Tamino war es.",
+    "Tamino versucht, eine Tür zu öffnen. Sie ist eine Schiebetür.",
+    "Status: maximal motiviert, minimal produktiv.",
+    "TAMINO.exe läuft mit erstaunlichen 2 FPS.",
+    "Die Entwickler übernehmen keine Verantwortung für Tamino.",
+    "Tamino hat gerade die Bedienungsanleitung ignoriert.",
+    "Erfolg! Tamino hat den falschen Knopf gefunden.",
+    "Tamino betätigt einen Schalter. Irgendwo geht das Licht aus.",
+    "Ein Wunder! Tamino hat eine Entscheidung getroffen.",
+    "Tamino.exe benötigt dringend einen Neustart.",
+    "Der Zufallsgenerator ist verwirrt. Das ist Tamino.",
+    "Tamino hat sich selbst ausgetrickst.",
+    "Achtung: Tamino nähert sich der Tastatur.",
+    "Das ist kein Bug. Das ist ein Tamino-Feature."
 ];
 
 const roasts = [
@@ -172,7 +786,42 @@ const roasts = [
     "Du bist nicht dumm. Du hast nur manchmal Ladeprobleme.",
     "Google sucht gerade nach deiner letzten Gehirnzelle.",
     "Dein größter Gegner ist wahrscheinlich eine Push-Nachricht.",
-    "Du bist der Grund, warum Shampoo eine Anleitung hat. 😭"
+    "Du bist der Grund, warum Shampoo eine Anleitung hat. 😭",
+    "Wenn Denken Strom erzeugen würde, wärst du ein Stromausfall.",
+    "Dein Gehirn hat mehr Leerzeichen als Inhalt.",
+    "Du bist nicht langsam. Du lädst nur in Zeitlupe.",
+    "Selbst der Taschenrechner fragt dich, ob du sicher bist.",
+    "Dein Schatten verlässt dich manchmal aus Fremdscham.",
+    "Du hast die Aura eines Windows-Updates bei 99 %.",
+    "Du bist wie ein Montagmorgen in menschlicher Form.",
+    "Deine Pläne haben die Haltbarkeit einer offenen Milch.",
+    "Du könntest dich in einem leeren Raum verlaufen.",
+    "Deine Konzentration hat einen Flug ohne Rückflug gebucht.",
+    "Du bist nicht die hellste Kerze auf der Geburtstagstorte.",
+    "Bei dir ist der Flugmodus dauerhaft aktiviert.",
+    "Du hast mehr Bugs als ein Early-Access-Spiel.",
+    "Dein Gehirn verwendet noch die kostenlose Testversion.",
+    "Deine Ausreden laden schneller als deine Lösungen.",
+    "Du bist der Endgegner des gesunden Menschenverstands.",
+    "Deine Ideen kommen mit Warnhinweis.",
+    "Selbst dein Wecker hat aufgegeben.",
+    "Du würdest beim Verstecken spielen vergessen, dich zu verstecken.",
+    "Du hast die Energie einer leeren Fernbedienungsbatterie.",
+    "Wenn Ahnungslosigkeit olympisch wäre, hättest du Gold.",
+    "Deine Logik hat gerade den Server verlassen.",
+    "Du bist wie ein Drucker: Niemand weiß, warum du nicht funktionierst.",
+    "Dein innerer Kompass zeigt auf Verwirrung.",
+    "Du hast mehr offene Tabs im Kopf als Chrome.",
+    "Dein Plan ist so stabil wie Pudding auf einem Trampolin.",
+    "Du bist ein lebender Beweis, dass Zufall existiert.",
+    "Du hast das Talent, eine einfache Sache kompliziert zu machen.",
+    "Dein Gehirn macht gerade Wartungsarbeiten. Seit 2012.",
+    "Du hast die Reaktionszeit eines Steins im Winterschlaf.",
+    "Deine Ausstrahlung sagt: Passwort vergessen.",
+    "Du bist der Grund, warum Möbel Anleitungen brauchen.",
+    "Deine Strategie ist: Hoffen und auf Aktualisieren drücken.",
+    "Du würdest sogar bei einem Quiz mit einer Frage verlieren.",
+    "Dein Talent ist so gut versteckt, dass es niemand findet."
 ];
 
 const compliments = [
@@ -180,23 +829,338 @@ const compliments = [
     "Seltenes Exemplar. Muss man ihm lassen.",
     "Aura +1000. Für ungefähr fünf Minuten.",
     "Tamino ist offiziell ein Ehrenmann. Vielleicht.",
-    "Legendenstatus vorübergehend aktiviert. 🏆"
+    "Legendenstatus vorübergehend aktiviert. 🏆",
+    "Du bist nicht perfekt. Aber ziemlich nah dran. Heute.",
+    "Deine Aura hat gerade den Raum verlassen, um Platz zu machen.",
+    "Tamino hat heute tatsächlich Main-Character-Energie.",
+    "Ein König. Nicht unbedingt mit Königreich, aber ein König.",
+    "Dein Potenzial ist größer als dein Chaos. Fast.",
+    "Die NASA möchte deine Aura untersuchen.",
+    "Du bist der seltene Drop, den niemand erwartet hat.",
+    "Heute läuft's. Morgen sehen wir weiter.",
+    "Deine Existenz ist statistisch gesehen bemerkenswert.",
+    "Du hast offiziell +500 Selbstvertrauen erhalten.",
+    "Du bist vielleicht chaotisch, aber immerhin unterhaltsam.",
+    "Tamino: 1. Rest der Welt: muss noch laden.",
+    "Du hast den Ehrenmann-Modus freigeschaltet.",
+    "Du bist nicht gewöhnlich. Zum Glück.",
+    "Deine Legende wird irgendwann erzählt. Vielleicht.",
+    "Du bist die Premium-Version unter den Menschen.",
+    "Du bringst selbst den Ladebalken zum Lächeln.",
+    "Deine Aura ist heute ausnahmsweise nicht im Energiesparmodus.",
+    "Du hast gerade das Tutorial des Lebens überlebt.",
+    "Tamino ist ein Meisterwerk. Die Anleitung fehlt nur.",
+    "Du bist die Hauptfigur. Die anderen sind NPCs. Vielleicht.",
+    "Dein Humor ist so selten wie ein fehlerfreies Windows-Update.",
+    "Du hast heute offiziell Stilpunkte gesammelt.",
+    "Du bist der Grund, warum der Tag etwas besser wird.",
+    "Legenden sterben nie. Sie vergessen nur manchmal ihr Passwort."
 ];
 
+const facts = [
+    "Tamino ist der Grund, warum der Ladebalken bei 99 % stehen bleibt.",
+    "Wissenschaftler haben Tamino untersucht. Die Studie ist noch immer verwirrt.",
+    "Wenn Tamino rennt, wird sein WLAN langsamer.",
+    "Tamino hat einmal nichts gemacht. Es war historisch.",
+    "Ein Tamino-Moment dauert zwischen 3 Sekunden und einer Ewigkeit.",
+    "Die Schwerkraft funktioniert auch bei Tamino. Meistens.",
+    "Tamino kann gleichzeitig recht haben und falsch liegen.",
+    "Das Universum ist unendlich. Tamino diskutiert trotzdem mit ihm.",
+    "Tamino wurde einmal von einer automatischen Tür ignoriert.",
+    "Die Wahrscheinlichkeit für Chaos steigt, wenn Tamino sagt: Ich hab einen Plan.",
+    "Tamino kann eine einfache Frage in ein mehrteiliges Abenteuer verwandeln.",
+    "Der Begriff 'gleich' wurde für Tamino erfunden. Er nutzt ihn flexibel.",
+    "Tamino hat schon einmal eine Benachrichtigung vergessen, während er sie las.",
+    "Es gibt 10 Arten von Menschen. Tamino kennt nur drei.",
+    "Tamino könnte einen Kühlschrank öffnen und vergessen, warum.",
+    "Sein Browser hat mehr Persönlichkeit als sein Task-Manager.",
+    "Tamino hat die Schwerkraft nie besiegt. Aber er versucht es weiterhin.",
+    "Das Wort 'später' hat bei Tamino eine eigene Zeitzone.",
+    "Niemand weiß, was Tamino plant. Nicht einmal Tamino.",
+    "Tamino.exe ist mit allen bekannten Betriebssystemen inkompatibel."
+];
+
+/* SIMULATOR */
+
+let clicks = 0;
+let aura = 0;
+let chaos = 98;
+
+function choose(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function showResult(message) {
+    const result = document.getElementById("result");
+
+    result.classList.remove("result-pop");
+
+    // Animation erneut auslösen
+    void result.offsetWidth;
+
+    result.textContent = message;
+    result.classList.add("result-pop");
+
+    clicks++;
+    document.getElementById("clicks").textContent = clicks;
+
+    playSound();
+}
+
 function randomEvent() {
-    document.getElementById("result").textContent =
-        events[Math.floor(Math.random() * events.length)];
+    showResult(choose(events));
 }
 
 function roast() {
-    document.getElementById("result").textContent =
-        roasts[Math.floor(Math.random() * roasts.length)];
+    showResult(choose(roasts));
 }
 
 function compliment() {
-    document.getElementById("result").textContent =
-        compliments[Math.floor(Math.random() * compliments.length)];
+    showResult(choose(compliments));
 }
+
+function surprise() {
+    const actions = [
+        randomEvent,
+        roast,
+        compliment,
+        () => {
+            showResult("🎉 KRITISCHER AURA-ÜBERLAUF!");
+            confetti();
+        },
+        () => {
+            chaos = Math.floor(Math.random() * 101);
+            updateChaosDisplay();
+            showResult("Chaos-Level verändert. Niemand weiß warum.");
+        }
+    ];
+
+    choose(actions)();
+}
+
+/* CHAOS-MESSGERÄT */
+
+function updateChaosDisplay() {
+    document.getElementById("chaosFill").style.width = chaos + "%";
+    document.getElementById("chaosValue").textContent = chaos + " % Chaos";
+}
+
+function updateChaos() {
+    chaos = Math.floor(Math.random() * 101);
+    updateChaosDisplay();
+
+    const messages = [
+        "Diagnose: kontrolliertes Chaos.",
+        "Diagnose: kritischer Tamino-Befall.",
+        "Diagnose: erstaunlich normal. Verdächtig.",
+        "Diagnose: Logik nicht mehr erreichbar.",
+        "Diagnose: Das Messgerät braucht Urlaub."
+    ];
+
+    showResult(choose(messages));
+}
+
+/* ZUFALLSFAKTEN */
+
+function newFact() {
+    const fact = document.getElementById("fact");
+
+    fact.style.opacity = "0";
+
+    setTimeout(() => {
+        fact.textContent = choose(facts);
+        fact.style.opacity = "1";
+    }, 150);
+
+    fact.style.transition = "opacity .15s";
+    playSound();
+}
+
+/* TERMINAL */
+
+function runTerminal() {
+    const terminal = document.getElementById("terminal");
+
+    const lines = [
+        "> Starte TAMINO-Diagnose...",
+        "> Suche Gehirnzellen...",
+        "> Ergebnis: keine Antwort vom Server.",
+        "> Prüfe Aura...",
+        "> Warnung: Messwert außerhalb des Universums.",
+        "> Lade Logik-Modul...",
+        "> Fehler 404: Modul nicht gefunden.",
+        "> Prüfe Systemstabilität...",
+        "> System ist stabil instabil.",
+        "> Diagnose abgeschlossen. Viel Glück."
+    ];
+
+    terminal.textContent = "";
+
+    let i = 0;
+
+    const interval = setInterval(() => {
+        if (i >= lines.length) {
+            clearInterval(interval);
+            terminal.textContent += "\n\n> Fertig. Bitte nicht ernst nehmen.";
+            return;
+        }
+
+        terminal.textContent += (i === 0 ? "" : "\n") + lines[i];
+        i++;
+    }, 220);
+
+    playSound();
+}
+
+/* AURA-BOOSTER */
+
+function boostAura() {
+    aura += Math.floor(Math.random() * 1001) + 100;
+
+    document.getElementById("auraBoost").textContent =
+        aura.toLocaleString("de-DE") + " Aura";
+
+    confetti();
+    playSound();
+}
+
+function resetAura() {
+    aura = 0;
+    document.getElementById("auraBoost").textContent = "0 Aura";
+}
+
+/* KONFETTI */
+
+function confetti() {
+    const colors = ["#c084fc", "#ec4899", "#818cf8", "#facc15", "#86efac"];
+
+    for (let i = 0; i < 65; i++) {
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = choose(colors);
+        piece.style.animationDuration = (1.5 + Math.random() * 2) + "s";
+        piece.style.animationDelay = Math.random() * .4 + "s";
+        piece.style.borderRadius = Math.random() > .5 ? "50%" : "2px";
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 4500);
+    }
+}
+
+/* OPTIONALER SOUND OHNE EXTERNE DATEI */
+
+let audioContext;
+
+function playSound() {
+    try {
+        audioContext ??= new (
+            window.AudioContext || window.webkitAudioContext
+        )();
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(
+            440 + Math.random() * 300,
+            audioContext.currentTime
+        );
+
+        gain.gain.setValueAtTime(.035, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioContext.currentTime + .09
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + .1);
+    } catch (error) {
+        // Die Website funktioniert auch ohne Sound.
+    }
+}
+
+/* SCHWEBENDE PARTIKEL */
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+let width = 0;
+let height = 0;
+
+function resizeCanvas() {
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    const count = Math.min(85, Math.floor(width / 15));
+
+    particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 2 + .5,
+        speed: Math.random() * .35 + .08,
+        alpha: Math.random() * .5 + .1
+    }));
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (const p of particles) {
+        p.y -= p.speed;
+        p.x += Math.sin(p.y * .008) * .15;
+
+        if (p.y < -10) {
+            p.y = height + 10;
+            p.x = Math.random() * width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(192, 132, 252, ${p.alpha})`;
+        ctx.fill();
+    }
+
+    requestAnimationFrame(animateParticles);
+}
+
+/* INITIALISIERUNG */
+
+resizeCanvas();
+animateParticles();
+
+window.addEventListener("resize", resizeCanvas);
+
+updateChaosDisplay();
+
+// Kleine zufällige Änderungen der Fake-Statistiken
+setInterval(() => {
+    document.getElementById("cpu").textContent =
+        Math.floor(75 + Math.random() * 26) + "%";
+
+    document.getElementById("ram").textContent =
+        choose(["404", "999", "∞", "0", "???"]);
+}, 3000);
 </script>
 
 </body>
